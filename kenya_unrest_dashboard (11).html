@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenya — Civil Unrest & Operational Risk Monitoring</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f4f6;
+    --surface: #ffffff;
+    --surface2: #f9fafb;
+    --border: #e5e7eb;
+    --border2: #d1d5db;
+    --text: #111827;
+    --text-sec: #374151;
+    --text-muted: #6b7280;
+    --text-faint: #9ca3af;
+    --high: #c0392b;
+    --high-bg: rgba(192,57,43,0.08);
+    --high-border: rgba(192,57,43,0.25);
+    --elev: #b5690a;
+    --elev-bg: rgba(181,105,10,0.08);
+    --elev-border: rgba(181,105,10,0.25);
+    --low: #1a6aad;
+    --low-bg: rgba(26,106,173,0.08);
+    --low-border: rgba(26,106,173,0.25);
+    --info: #1a6aad;
+    --info-bg: rgba(26,106,173,0.08);
+    --info-border: rgba(26,106,173,0.25);
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 13.5px;
+    line-height: 1.5;
+    min-height: 100vh;
+    padding: 1.5rem 1rem 3rem;
+  }
+  .container { max-width: 1100px; margin: 0 auto; width: 100%; }
+
+  /* HEADER */
+  .header { border-bottom: 1px solid var(--border2); padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+  .dash-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .dash-subtitle { font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 10px; border-radius: 999px;
+    white-space: nowrap;
+  }
+  .badge-high  { background: var(--high-bg); color: var(--high); border: 1px solid var(--high-border); }
+  .badge-elev  { background: var(--elev-bg); color: var(--elev); border: 1px solid var(--elev-border); }
+  .badge-low   { background: var(--low-bg); color: var(--low); border: 1px solid var(--low-border); }
+  .badge-info  { background: var(--info-bg); color: var(--info); border: 1px solid var(--info-border); }
+
+  .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+  .dot-high { background: var(--high); animation: pulse 2.2s ease-in-out infinite; }
+  .dot-elev { background: var(--elev); }
+  .dot-low  { background: var(--low); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.45} }
+
+  .trend { font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .trend-det   { color: #a0382c; }
+  .trend-sdet  { color: #8a5a0a; }
+  .trend-nochg { color: var(--text-muted); }
+
+  /* SECTIONS */
+  .section { margin-bottom: 1.25rem; animation: fadeUp 0.35s ease both; }
+  .section:nth-child(1) { animation-delay: 0.00s; }
+  .section:nth-child(2) { animation-delay: 0.06s; }
+  .section:nth-child(3) { animation-delay: 0.12s; }
+  .section:nth-child(4) { animation-delay: 0.18s; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+
+  .sec-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.5rem; padding: 0 2px;
+  }
+
+  /* CARD */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+
+  /* KEY INSIGHTS */
+  .insights-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--high); border-radius: 6px;
+  }
+  .exec-table { width: 100%; border-collapse: collapse; }
+  .exec-table tr { border-bottom: 1px solid var(--border); }
+  .exec-table tr:last-child { border-bottom: none; }
+  .exec-table td { padding: 0.75rem 1.1rem; vertical-align: top; }
+  .exec-table td.exec-lbl {
+    width: 140px; font-weight: 600; color: var(--text-muted);
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+    white-space: nowrap; padding-top: 0.85rem;
+  }
+  .exec-table td.exec-content { font-size: 13px; color: var(--text-sec); line-height: 1.5; }
+  .exec-bullets { list-style: none; display: flex; flex-direction: column; gap: 4px; padding: 0; margin: 0; }
+  .exec-bullets li { padding-left: 12px; position: relative; line-height: 1.5; }
+  .exec-bullets li::before { content: "•"; position: absolute; left: 0; color: var(--text-muted); }
+
+  /* INDICATOR TABLE */
+  .ind-table { width: 100%; border-collapse: collapse; }
+  .ind-table thead tr { background: var(--surface2); border-bottom: 1px solid var(--border2); }
+  .ind-table th {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-align: left; padding: 8px 12px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .ind-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .ind-table tbody tr:last-child td { border-bottom: none; }
+  .ind-table tbody tr:hover { background: var(--surface2); }
+  .ind-name { font-weight: 500; font-size: 13px; color: var(--text); margin-bottom: 0; }
+  .ind-summary { font-size: 13px; color: var(--text-sec); line-height: 1.6; margin-bottom: 0; }
+
+  /* WHAT TO WATCH DROPDOWN */
+  .wtw-wrap { margin-top: 8px; }
+  .wtw-toggle {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11.5px; font-weight: 500; color: var(--info);
+    background: var(--info-bg); border: 1px solid var(--info-border);
+    border-radius: 999px; padding: 3px 10px; cursor: pointer;
+    user-select: none; transition: background 0.15s;
+  }
+  .wtw-toggle:hover { background: rgba(26,106,173,0.14); }
+  .wtw-toggle .wtw-arrow { font-size: 10px; transition: transform 0.2s; display: inline-block; }
+  .wtw-toggle.open .wtw-arrow { transform: rotate(180deg); }
+  .wtw-body {
+    display: none; margin-top: 6px;
+    background: var(--info-bg); border: 1px solid var(--info-border);
+    border-radius: 5px; padding: 10px 12px;
+    font-size: 12.5px; color: var(--text-sec); line-height: 1.65;
+  }
+  .wtw-body.open { display: block; }
+  .wtw-body strong { color: var(--text); font-weight: 600; }
+
+  /* CONFIDENCE */
+  .conf-inner { padding: 0.9rem 1.1rem; }
+  .conf-row { display: flex; align-items: center; gap: 10px; margin-bottom: 0.65rem; }
+  .conf-label { font-size: 12px; color: var(--text-muted); font-weight: 500; min-width: 130px; }
+  .conf-body { font-size: 13px; color: var(--text-sec); line-height: 1.65; }
+  .conf-body + .conf-body { margin-top: 0.5rem; }
+
+  hr.div { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
+
+  .footer {
+    margin-top: 2rem; padding-top: 0.75rem; border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--text-faint);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px;
+  }
+
+  @media (max-width: 600px) {
+    .ind-table thead { display: none; }
+    .ind-table td { display: block; padding: 6px 12px; }
+    .ind-table tr { display: block; border-bottom: 1px solid var(--border); padding: 8px 0; }
+    .ind-table tbody tr:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="dash-title">Kenya — Civil Unrest & Operational Risk Monitoring</div>
+    <div class="dash-subtitle">Updated: 26 June 2026 &nbsp;·&nbsp; Reporting period: 29 May – 26 June 2026</div>
+  </div>
+
+  <!-- KEY INSIGHTS -->
+  <div class="section">
+    <div class="sec-label">Key Insights</div>
+    <div class="insights-card">
+      <table class="exec-table">
+        <tr>
+          <td class="exec-lbl">Current Situation</td>
+          <td class="exec-content">
+            <ul class="exec-bullets">
+              <li>25 June protests proceeded across Nairobi — CBD sealed off, tear gas deployed, 355 arrested nationwide; no confirmed fatalities, a significant improvement on 2024 and 2025 anniversaries.</li>
+              <li>Heavy pre-emptive security operation effectively contained demonstrations — Nairobi CBD deserted by 9am; protesters constrained to University Way, did not reach Parliament.</li>
+              <li>Ebola facility remains an active secondary flashpoint — Health CS in contempt of court, Doctors Union strike ultimatum outstanding.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="exec-lbl">Key Changes</td>
+          <td class="exec-content">
+            <ul class="exec-bullets">
+              <li>No fatalities confirmed on 25 June — security operation prevented the violence seen in 2024 (60 killed) and 2025 (16 killed).</li>
+              <li>355 arrested nationwide; Interior Minister Murkomen apologised for the inconvenience of barricades — a notably conciliatory tone versus previous years.</li>
+              <li>CBD effectively shut for the day — roadblocks on all major arterials, matatus barred from entering, businesses closed.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="exec-lbl">Key Implications</td>
+          <td class="exec-content">
+            <ul class="exec-bullets">
+              <li>CBD operations can resume today — situation has stabilised; no sustained unrest or property damage confirmed.</li>
+              <li>Saba Saba (7 July) is the next mobilisation date — monitor for further protest calls as the government's security-first approach has not resolved underlying grievances.</li>
+              <li>Anger remains directed at government policy, not Western businesses — no change to targeting risk.</li>
+            </ul>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- INDICATOR SUMMARY -->
+  <div class="section">
+    <div class="sec-label">Indicator Summary</div>
+    <div class="card">
+      <table class="ind-table">
+        <thead>
+          <tr>
+            <th style="width:20%">Indicator</th>
+            <th style="width:10%">Status</th>
+            <th style="width:16%">Trend</th>
+            <th>Summary</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <!-- CIVIL UNREST -->
+          <tr>
+            <td><div class="ind-name">Civil Unrest Status</div></td>
+            <td><span class="badge badge-elev"><span class="dot dot-elev"></span>&nbsp;Elevated</span></td>
+            <td><span class="trend trend-sdet">↘ Slightly Deteriorating</span></td>
+            <td>
+              <div class="ind-summary">25 June protests proceeded but were heavily contained — CBD sealed off, tear gas deployed, 355 arrested nationwide; no confirmed fatalities. Situation stabilising as of 26 June; underlying grievances unresolved.</div>
+              <div class="wtw-wrap">
+                <span class="wtw-toggle" onclick="toggleWtw(this)">⊙ What to watch <span class="wtw-arrow">▾</span></span>
+                <div class="wtw-body"><strong>Escalation trigger.</strong> Saba Saba Day on 7 July is the next major mobilisation date. Monitor for fresh protest calls in the coming days — the government's security-first approach suppressed but did not resolve public anger. Any further Finance Bill or Ebola developments could accelerate mobilisation.</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- POLICE CONDUCT -->
+          <tr>
+            <td><div class="ind-name">Police Conduct &amp; Use of Force</div></td>
+            <td><span class="badge badge-elev"><span class="dot dot-elev"></span>&nbsp;Elevated</span></td>
+            <td><span class="trend trend-nochg">→ No Change</span></td>
+            <td>
+              <div class="ind-summary">Tear gas deployed on 25 June; 355 arrested nationwide including activist Bob Njagi on incitement charges. No confirmed live rounds or fatalities — Murkomen's public apology for barricade inconvenience signals a notably conciliatory tone versus prior years.</div>
+              <div class="wtw-wrap">
+                <span class="wtw-toggle" onclick="toggleWtw(this)">⊙ What to watch <span class="wtw-arrow">▾</span></span>
+                <div class="wtw-body"><strong>Escalation trigger.</strong> Mass arrest processing and any terrorism or incitement charges filed against protesters will be a key flashpoint — 2025 precedent saw 1,500 charged, generating significant civil society backlash. Monitor IPOA statements and any reports of abuse in custody.</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- ANTI-US -->
+          <tr>
+            <td><div class="ind-name">Anti-US/Western Sentiment &amp; Targeting Risk</div></td>
+            <td><span class="badge badge-low"><span class="dot dot-low"></span>&nbsp;Low</span></td>
+            <td><span class="trend trend-nochg">→ No Change</span></td>
+            <td>
+              <div class="ind-summary">U.S. Embassy issued a formal demonstration alert ahead of today's protests. Backlash remains directed at U.S. government Ebola policy specifically — no confirmed incidents against Western businesses or personnel.</div>
+            </td>
+          </tr>
+
+          <!-- EBOLA -->
+          <tr>
+            <td><div class="ind-name">Ebola Facility Backlash</div></td>
+            <td><span class="badge badge-elev"><span class="dot dot-elev"></span>&nbsp;Elevated</span></td>
+            <td><span class="trend trend-det">↘ Deteriorating</span></td>
+            <td>
+              <div class="ind-summary">Health CS Duale held in contempt of court and ordered to appear personally for sentencing; Doctors Union issued a 48-hour strike ultimatum. Three protesters killed since 1 June; court battle ongoing with U.S. flights continuing post-suspension.</div>
+              <div class="wtw-wrap">
+                <span class="wtw-toggle" onclick="toggleWtw(this)">⊙ What to watch <span class="wtw-arrow">▾</span></span>
+                <div class="wtw-body"><strong>Escalation trigger.</strong> Doctors Union strike would have immediate operational impact on healthcare access for staff and families. Health CS sentencing hearing could trigger solidarity protests. Monitor whether Ebola grievances merge with today's Finance Bill demonstrations into a unified anti-government action.</div>
+              </div>
+            </td>
+          </tr>
+
+          <!-- STUDENT -->
+          <tr>
+            <td><div class="ind-name">Student &amp; Youth Unrest</div></td>
+            <td><span class="badge badge-low"><span class="dot dot-low"></span>&nbsp;Low</span></td>
+            <td><span class="trend trend-nochg">→ No Change</span></td>
+            <td>
+              <div class="ind-summary">DPP approved 16 murder charges against students linked to the Utumishi Girls Academy fire — issue moving through courts, not streets. Youth energy is channelling into today's broader protest movement rather than standalone student action.</div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr class="div">
+
+  <!-- CONFIDENCE -->
+  <div class="section">
+    <div class="sec-label">Confidence Assessment</div>
+    <div class="card">
+      <div class="conf-inner">
+        <div class="conf-row">
+          <span class="conf-label">Overall Confidence</span>
+          <span class="badge badge-info">Moderate–High</span>
+        </div>
+        <p class="conf-body">25 June outcome corroborated across Al Jazeera, Daily Nation, Euronews, Washington Post, and OkayAfrica. Arrest figure of 355 confirmed by Interior Minister Murkomen on record. No-fatality finding consistent across multiple sources.</p>
+        <p class="conf-body">Key gap: full casualty picture from arrests and any custody incidents not yet confirmed; Saba Saba (7 July) protest intent not yet publicly declared. Recommend refresh by 30 June.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>Kenya — Civil Unrest & Operational Risk Monitoring &nbsp;·&nbsp; For internal use only</span>
+    <span>Next recommended update: 28–30 June 2026 or upon trigger event (Saba Saba 7 July)</span>
+  </div>
+
+</div>
+
+<script>
+  function toggleWtw(el) {
+    el.classList.toggle('open');
+    const body = el.nextElementSibling;
+    body.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
